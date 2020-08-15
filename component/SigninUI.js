@@ -63,13 +63,21 @@ class SigninNewComponet extends Component {
     } else if (
       this.state.passValidate === false &&
       this.state.emailValidate === true
-    ) {
+    )
+     {
       if (this.state.password !== "" && this.state.email !== "") {
         alert("email   : " + email + "password  :" + password);
       } else {
         this.setState({ emailError: "Please enter email " });
       }
-    } else {
+    } 
+    else if (
+        this.state.passValidate === false &&
+        this.state.emailValidate === false
+      ){
+        this.setState({ emailError: "Please enter cortect email " });
+      }
+    else {
       alert("email   : " + email + "password  :" + password);
     }
   };
