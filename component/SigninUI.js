@@ -13,18 +13,65 @@ class SigninNewComponet extends Component {
     password: "",
     emailValidate: true,
     passValidate: true,
+    emailError: "",
+    passwordError: ""
   };
 
   handleEmail = (text) => {
-   console.log(Text)
+    console.log(text);
+    let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (reg.test(text) === false) {
+      console.log("Email is Not Correct");
+      this.setState({ emailValidate: false });
+    } else {
+      this.setState({ email: text, emailValidate: true });
+      this.setState({ emailError: "" });
+      console.log("Email is Correct");
+    }
   };
 
   handlePassword = (text) => {
     console.log(text);
+    let reg = /^$|\s+/;
+    if (reg.test(text) === false) {
+      console.log("password is Not Correct");
+      this.setState({ passValidate: false });
+      this.setState({ passwordError: "", password: text });
+    } else {
+      this.setState({ password: text, passValidate: true });
+      console.log("Add the password");
+    }
   };
 
   login = (email, password) => {
     console.log(this.state.passValidate, this.state.emailValidate);
+    if (this.state.passValidate === true && this.state.emailValidate === true) {
+      if (this.state.password !== "" && this.state.email !== "") {
+      } else if (this.state.password === "" && this.state.email !== "") {
+        this.setState({ passwordError: "Please enter password " });
+      } else if (this.state.password !== "" && this.state.email === "") {
+        this.setState({ emailError: "Please enter email " });
+      } else {
+        this.setState({ emailError: "Please enter email" });
+        this.setState({ passwordError: "Please enter password" });
+      }
+    } else if (
+      this.state.passValidate === true &&
+      this.state.emailValidate === false
+    ) {
+      this.setState({ emailError: "Please enter corect email" });
+    } else if (
+      this.state.passValidate === false &&
+      this.state.emailValidate === true
+    ) {
+      if (this.state.password !== "" && this.state.email !== "") {
+        alert("email   : " + email + "password  :" + password);
+      } else {
+        this.setState({ emailError: "Please enter email " });
+      }
+    } else {
+      alert("email   : " + email + "password  :" + password);
+    }
   };
 
   render() {
@@ -33,22 +80,39 @@ class SigninNewComponet extends Component {
         <View style={styles.usernameText}>
           <Text style={{ marginTop: 25 }}> Username </Text>
           <TextInput
-            style={styles.input}
+            style={[
+              styles.input,
+              !this.state.emailValidate ? styles.error : null
+            ]}
             underlineColorAndroid="transparent"
             onChangeText={this.handleEmail}
           />
         </View>
 
+        <View style={styles.emailError}>
+          <Text style={{ color: "red", fontSize: 10 }}>
+            {this.state.emailError}
+          </Text>
+        </View>
+
         <View style={styles.usernameText}>
           <Text style={{ marginTop: 25 }}> Password </Text>
           <TextInput
-            style={
-              styles.input}
+            style={[
+              styles.input,
+              !this.state.emailValidate ? styles.error1 : null
+            ]}
             underlineColorAndroid="transparent"
             // placeholder="password"
             // placeholderTextColor="#9a73ef"
             onChangeText={this.handlePassword}
           />
+        </View>
+
+        <View style={styles.emailError}>
+          <Text style={{ color: "red", fontSize: 10 }}>
+            {this.state.passwordError}
+          </Text>
         </View>
 
         <View style={styles.submitButtonPlce}>
@@ -105,5 +169,13 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "flex-end"
   },
-
+  error: {
+    borderWidth: 3,
+    borderColor: "red"
+  },
+  emailError: {
+    justifyContent: "flex-end",
+    alignItems: "flex-end",
+    right: 20
+  }
 });
